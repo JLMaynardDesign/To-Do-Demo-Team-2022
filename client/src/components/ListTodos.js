@@ -1,27 +1,29 @@
 //useEffect will make a fetch request to the Restful API everytime this component is rendered
 import React, { Fragment, useEffect, useState } from "react";
 
+import EditTodo from "./EditTodo";
+
 //we grab basic table from Bootstrap 4 link: https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_table_basic&stacked=h 
 
 const ListTodos = () => {
 
   const [todos, setTodos] = useState([]);
 
-  //delete todo function
+    //delete todo function
 
-  const deleteTodo = async (id) => {
-    try {
-      const deleteTodo = await fetch(`http://localhost:8080/todos/${id}`,
-        { method: "DELETE" });
-
-
+    const deleteTodo = async (id) => {
+      try {
+        const deleteTodo = await fetch(`http://localhost:8080/todos/${id}`,
+      { method: "DELETE"}); 
+      
+      
       //only return ones that meet this following condition
-      setTodos(todos.filter(todo => todo.todo_id !== id));
+      setTodos(todos.filter(todo => todo.todo_id !==id));
+      }
+      catch (err) {
+        console.error(err.message)
+      }
     }
-    catch (err) {
-      console.error(err.message)
-    }
-  }
   const getTodos = async () => {
     try {
       const response = await fetch("http://localhost:8080/todos")
@@ -66,7 +68,9 @@ const ListTodos = () => {
           {todos.map(todo => (
             <tr key={todo.todo_id}>
               <td>{todo.description}</td>
-              <td>Edit</td>
+              <td>
+                <EditTodo todo={todo}/>
+                </td>
               <td><button className="btn btn-danger" onClick={() => deleteTodo(todo.todo_id)}>Delete</button></td>
             </tr>
           ))}
